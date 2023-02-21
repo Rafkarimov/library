@@ -1,0 +1,5 @@
+local:
+  db:
+    url: jdbc:postgresql://localhost:5432/postgres
+    user: postgres
+    pass: 12345
