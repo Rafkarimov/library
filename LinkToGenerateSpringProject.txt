@@ -2,5 +2,7 @@ https://start.spring.io/ --сайт для генерации и скачива�
 https://ondras.zarovi.cz/sql/demo/?keyword=default -- сайт для создания диаграммы базы данных и генерации SQL для создания таблиц
 https://docs.spring.io/spring-data/jpa/docs/1.5.0.RELEASE/reference/html/jpa.repositories.html -- Table 2.3. таблица с маппингом название методов репозитория на селекты
 https://www.baeldung.com/jpa-cascade-types -- CascadeTypes
+https://www.javatpoint.com/spring-boot-crud-operations -- crud operations
+https://habr.com/ru/company/haulmont/blog/653843/ -- GenerationType
 
 curl -X POST --data 'qwe' localhost:8080/qwe/postObject --header "Content-Type:text/plain"

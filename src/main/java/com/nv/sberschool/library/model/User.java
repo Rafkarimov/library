@@ -1,6 +1,14 @@
 package com.nv.sberschool.library.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -36,7 +44,7 @@ public class User extends GenericModel {
     @Column(name = "address")
     private String address;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "role_id", nullable = false,
             foreignKey = @ForeignKey(name = "FK_USER_ROLES"))
     private Role role;
@@ -150,4 +158,5 @@ public class User extends GenericModel {
                 '}';
     }
 }
+
 

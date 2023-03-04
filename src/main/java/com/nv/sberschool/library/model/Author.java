@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "authors")
 @SequenceGenerator(name = "default_gen", sequenceName = "authors_seq", allocationSize = 1)
-//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "jsonId")
 public class Author extends GenericModel {
     @Column(name = "fio", nullable = false)
     private String authorFio;
@@ -31,7 +31,7 @@ public class Author extends GenericModel {
             name = "books_authors",
             joinColumns = @JoinColumn(name = "author_id"), foreignKey = @ForeignKey(name = "FK_AUTHORS_BOOKS"),
             inverseJoinColumns = @JoinColumn(name = "book_id"), inverseForeignKey = @ForeignKey(name = "FK_BOOKS_AUTHORS"))
-    @JsonBackReference
+//    @JsonBackReference
     private Set<Book> books;
 
     public String getAuthorFio() {
@@ -79,3 +79,4 @@ public class Author extends GenericModel {
                 '}';
     }
 }
+

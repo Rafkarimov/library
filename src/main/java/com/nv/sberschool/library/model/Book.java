@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "books")
 @SequenceGenerator(name = "default_gen", sequenceName = "books_seq", allocationSize = 1)
-//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "jsonId")
 public class Book extends GenericModel {
     @Column(name = "title", nullable = false)
     private String bookTitle;
@@ -138,3 +138,5 @@ public class Book extends GenericModel {
                 '}';
     }
 }
+
+
