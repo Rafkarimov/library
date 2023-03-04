@@ -1,2 +1,6 @@
 https://start.spring.io/ --сайт для генерации и скачивания спринг проэкта
 https://ondras.zarovi.cz/sql/demo/?keyword=default -- сайт для создания диаграммы базы данных и генерации SQL для создания таблиц
+https://docs.spring.io/spring-data/jpa/docs/1.5.0.RELEASE/reference/html/jpa.repositories.html -- Table 2.3. таблица с маппингом название методов репозитория на селекты
+https://www.baeldung.com/jpa-cascade-types -- CascadeTypes
+
+curl -X POST --data 'qwe' localhost:8080/qwe/postObject --header "Content-Type:text/plain"

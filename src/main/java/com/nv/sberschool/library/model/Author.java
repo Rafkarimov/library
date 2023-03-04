@@ -1,5 +1,8 @@
 package com.nv.sberschool.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -13,6 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "authors")
 @SequenceGenerator(name = "default_gen", sequenceName = "authors_seq", allocationSize = 1)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Author extends GenericModel {
     @Column(name = "fio", nullable = false)
     private String authorFio;
@@ -22,7 +26,12 @@ public class Author extends GenericModel {
 
     @Column(name = "description")
     private String description;
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "books_authors",
+            joinColumns = @JoinColumn(name = "author_id"), foreignKey = @ForeignKey(name = "FK_AUTHORS_BOOKS"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"), inverseForeignKey = @ForeignKey(name = "FK_BOOKS_AUTHORS"))
+    @JsonBackReference
     private Set<Book> books;
 
     public String getAuthorFio() {
@@ -60,11 +69,13 @@ public class Author extends GenericModel {
     @Override
     public String toString() {
         return "Author{" +
-                "id=" + id +
-                ", authorFio='" + authorFio + '\'' +
+                "authorFio='" + authorFio + '\'' +
                 ", birthDate=" + birthDate +
                 ", description='" + description + '\'' +
-                ", books=" + books +
+                ", books=" + books.stream().map(Book::getId).toList() +
+                ", id=" + id +
+                ", createdWhen=" + createdWhen +
+                ", createdBy='" + createdBy + '\'' +
                 '}';
     }
 }
