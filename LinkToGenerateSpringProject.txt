@@ -4,5 +4,6 @@ https://docs.spring.io/spring-data/jpa/docs/1.5.0.RELEASE/reference/html/jpa.rep
 https://www.baeldung.com/jpa-cascade-types -- CascadeTypes
 https://www.javatpoint.com/spring-boot-crud-operations -- crud operations
 https://habr.com/ru/company/haulmont/blog/653843/ -- GenerationType
+https://github.com/iluwatar/java-design-patterns/ -- java-design-patterns
 
 curl -X POST --data 'qwe' localhost:8080/qwe/postObject --header "Content-Type:text/plain"

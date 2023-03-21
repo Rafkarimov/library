@@ -1,10 +1,20 @@
 package com.nv.sberschool.library.model;
 
-import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 @Table(name = "book_rent_info")
 @SequenceGenerator(name = "default_gen", sequenceName = "book_rent_info_seq", allocationSize = 1)
 public class BookRentInfo extends GenericModel {
@@ -27,54 +37,6 @@ public class BookRentInfo extends GenericModel {
 
     @Column(name = "rent_period", nullable = false)
     private Integer rentPeriod;
-
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public LocalDate getRentDate() {
-        return rentDate;
-    }
-
-    public void setRentDate(LocalDate rentDate) {
-        this.rentDate = rentDate;
-    }
-
-    public LocalDate getReturnDate() {
-        return returnDate;
-    }
-
-    public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
-    }
-
-    public boolean isReturned() {
-        return returned;
-    }
-
-    public void setReturned(boolean returned) {
-        this.returned = returned;
-    }
-
-    public Integer getRentPeriod() {
-        return rentPeriod;
-    }
-
-    public void setRentPeriod(Integer rentPeriod) {
-        this.rentPeriod = rentPeriod;
-    }
 
     @Override
     public String toString() {

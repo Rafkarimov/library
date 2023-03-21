@@ -19,11 +19,9 @@ public class OpenApiConfig {
                         .description("Сервис, позволяющий арендовать книгу в онлайн библиотеке.")
                         .version("v0.1")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org"))
-                        .contact(new Contact().name("Nikita Volkov")
+                        .contact(new Contact().name("Nikita Veko")
                                 .email("")
                                 .url(""))
                 );
     }
 }
-
-

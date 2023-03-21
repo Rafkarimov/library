@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Книги библиотеки</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="mt-5">
+        <div class="row">
+            <div class="col">
+                <h2>Все книги библиотеки</h2>
+            </div>
+            <div class="col">
+                <a href="/books/add"
+                   class="btn btn-success"
+                   role="button"
+                   style="float: right"
+                   aria-disabled="true">Добавить книгу</a>
+            </div>
+        </div>
+        <div>
+            <table class="table table-hover mt-3">
+                <thead>
+                <tr>
+                    <th scope="col">Название</th>
+                    <th scope="col">Жанр</th>
+                    <th scope="col">Место хранения</th>
+                    <th scope="col">Количество</th>
+                    <th scope="col">Дата публикации</th>
+                    <th scope="col">Автор(ы)</th>
+                    <!--          <th scope="col">Онлайн копия</th>-->
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="book : ${books}">
+                    <td>
+                        <a class="text-link text-blue" th:href="'/books/' + ${book.getId()}" th:text="${book.getBookTitle()}"></a>
+                    </td>
+                    <td th:text="${book.getGenre().getGenreTextDisplay()}"></td>
+                    <td th:text="${book.getStoragePlace()}"></td>
+                    <td th:classappend="${book.getAmount() <= 0} ? 'not-enough-book'"
+                        th:text="${book.getAmount()} <= 0 ? 'Нет в наличии' : ${book.getAmount()}"></td>
+                    <td th:text="${book.getPublishDate()}"></td>
+                    <td>
+                        <!--            <ul>-->
+                        <!--              <li th:each="author : ${book.getAuthors()}" th:text="${author.getAuthorFio()}"></li>-->
+                        <!--            </ul>-->
+                    </td>
+                    <td>
+                        <div>
+                            <a class="btn btn-sm btn-outline-success" th:href="'/books/update/' + ${book.id}">Обновить</a>
+                            <a class="btn btn-sm btn-outline-danger" th:href="'/books/delete/' + ${book.id}">Удалить</a>
+                        </div>
+                        <a th:if="${book.getAmount() > 0}" class="btn btn-sm btn-outline-success"
+                           th:href="'/publish/get-book/' + ${book.id}">Арендовать книгу</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
+

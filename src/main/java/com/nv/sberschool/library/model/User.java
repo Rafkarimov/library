@@ -1,5 +1,8 @@
 package com.nv.sberschool.library.model;
 
+import java.time.LocalDate;
+import java.util.Set;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,11 +12,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-
-import java.time.LocalDate;
-import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 @SequenceGenerator(name = "default_gen", sequenceName = "users_seq", allocationSize = 1)
 public class User extends GenericModel {
@@ -44,6 +48,7 @@ public class User extends GenericModel {
     @Column(name = "address")
     private String address;
 
+    //TODO при создании пользователя с несуществующей ролью, роль добавляется в базу
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "role_id", nullable = false,
             foreignKey = @ForeignKey(name = "FK_USER_ROLES"))
@@ -51,94 +56,6 @@ public class User extends GenericModel {
 
     @OneToMany(mappedBy = "user")
     private Set<BookRentInfo> bookRentInfos;
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public Set<BookRentInfo> getBookRentInfos() {
-        return bookRentInfos;
-    }
-
-    public void setBookRentInfos(Set<BookRentInfo> bookRentInfos) {
-        this.bookRentInfos = bookRentInfos;
-    }
 
     @Override
     public String toString() {
@@ -158,5 +75,3 @@ public class User extends GenericModel {
                 '}';
     }
 }
-
-

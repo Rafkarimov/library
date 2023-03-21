@@ -2,18 +2,22 @@ package com.nv.sberschool.library.controller;
 
 import com.nv.sberschool.library.model.Book;
 import com.nv.sberschool.library.model.Genre;
-import com.nv.sberschool.library.repository.BookRepository;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/qwe")
 @Slf4j
+@Hidden
 public class QweController {
 
     @GetMapping(value = "/hello")
@@ -54,5 +58,3 @@ public class QweController {
 //        return ResponseEntity.status(HttpStatus.OK).body(bookRepository.findById(id).get());
 //    }
 }
-
-

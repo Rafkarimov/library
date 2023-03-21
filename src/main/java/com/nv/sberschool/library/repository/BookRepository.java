@@ -7,11 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@Hidden
 public interface BookRepository extends GenericRepository<Book> {
     List<Book> findByBookTitle(String bookTitle);
     List<Book> findByBookTitleAndStoragePlace(String bookTitle, String storagePlace);
     List<Book> findByBookTitleOrStoragePlace(String bookTitle, String storagePlace);
 }
-
 

@@ -1,16 +1,44 @@
 package com.nv.sberschool.library.controller;
 
+import com.nv.sberschool.library.dto.BookRentInfoDto;
+import com.nv.sberschool.library.mapper.BookRentInfoMapper;
 import com.nv.sberschool.library.model.BookRentInfo;
-import com.nv.sberschool.library.repository.BookRentInfoRepository;
-import com.nv.sberschool.library.repository.GenericRepository;
+import com.nv.sberschool.library.service.BookRentInfoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/rentInfos")
-public class BookRentInfoController extends GenericController<BookRentInfo> {
-    public BookRentInfoController(BookRentInfoRepository bookRentInfoRepository) {
-        super(bookRentInfoRepository);
+@RequestMapping("/rent/info")
+@Tag(name = "Аренда книг",
+        description = "Контроллер для работы с арендой/выдачей книг пользователям библиотеки")
+public class BookRentInfoController extends GenericController<BookRentInfo, BookRentInfoDto> {
+
+    private final BookRentInfoService service;
+    private final BookRentInfoMapper mapper;
+
+    public BookRentInfoController(
+            BookRentInfoService service,
+            BookRentInfoMapper mapper) {
+        super(service, mapper);
+        this.service = service;
+        this.mapper = mapper;
     }
+
+    @Operation(description = "Просмотреть список арендованных пользователем книг", method = "getUserRentBookInfo")
+    @RequestMapping(value = "/get-user-rent-book-info/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<BookRentInfoDto>> getUserRentBookInfo(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(mapper.toDtos(service.getUserBookRentInfo(userId)));
+    }
+
 }
+
+
 

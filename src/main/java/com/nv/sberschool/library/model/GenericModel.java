@@ -1,7 +1,11 @@
 package com.nv.sberschool.library.model;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+//@ToString
 @MappedSuperclass
 public class GenericModel {
     @Id
@@ -19,9 +24,10 @@ public class GenericModel {
     protected Long id;
 
     @Column(name = "created_when")
-    protected LocalDateTime createdWhen;
+    protected LocalDateTime createdWhen = LocalDateTime.now();
 
     @Column(name = "created_by")
-    protected String createdBy;
+    protected String createdBy = "DEFAULT_USER";
 }
+
 
