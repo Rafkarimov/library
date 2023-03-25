@@ -1,11 +1,7 @@
 package com.nv.sberschool.library.model;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +24,20 @@ public class GenericModel {
 
     @Column(name = "created_by")
     protected String createdBy = "DEFAULT_USER";
-}
 
+    @Column(name = "is_deleted")
+    protected boolean isDeleted = false;
+
+    @Column(name = "deleted_by")
+    protected String deletedBy;
+
+    @Column(name = "deleted_when")
+    protected LocalDateTime deletedWhen;
+
+    @Column(name = "updated_when")
+    protected LocalDateTime updatedWhen;
+
+    @Column(name = "updated_by")
+    protected String updatedBy;
+}
 

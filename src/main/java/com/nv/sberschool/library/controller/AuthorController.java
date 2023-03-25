@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
 @RestController
-@RequestMapping("/authors")
+@RequestMapping("/rest/authors")
 @Tag(name = "Авторы", description = "Контроллер для работы с авторами книг библиотеки")
 public class AuthorController extends GenericController<Author, AuthorDto> {
 
@@ -57,3 +57,4 @@ public class AuthorController extends GenericController<Author, AuthorDto> {
         return ResponseEntity.ok().body(authorWithBooksMapper.toDtos(authorService.listAll()));
     }
 }
+

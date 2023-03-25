@@ -12,8 +12,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class GenericDto {
+
     protected Long id;
     protected LocalDateTime createdWhen = LocalDateTime.now();
     protected String createdBy = "DEFAULT_USER";
+    protected boolean isDeleted = false;
+    protected String deletedBy;
+    protected LocalDateTime deletedWhen;
+    protected LocalDateTime updatedWhen;
+    protected String updatedBy;
 }
+
+
 

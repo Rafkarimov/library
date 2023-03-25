@@ -35,9 +35,9 @@ public abstract class GenericController<T extends GenericModel, N extends Generi
 
     @RequestMapping(value = "/getByCreator", method = RequestMethod.GET,
             produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<T>> getByCreator(@RequestParam(value = "creator") String creator) {
+    public ResponseEntity<List<N>> getByCreator(@RequestParam(value = "creator") String creator) {
         return ResponseEntity.status(OK)
-                .body(service.findByCreatedBy(creator));
+                .body(mapper.toDtos(service.findByCreatedBy(creator)));
     }
 
     @Operation(description = "Получить все записи", method = "getAll")
@@ -75,5 +75,18 @@ public abstract class GenericController<T extends GenericModel, N extends Generi
         service.delete(id);
     }
 
+    @Operation(description = "Софт удаление записи по ID", method = "soft delete")
+    @RequestMapping(value = "/soft-delete/{id}", method = RequestMethod.DELETE)
+    public void softDelete(@PathVariable(value = "id") Long id) {
+        service.softDelete(id);
+    }
+
+    @Operation(description = "Восстановление записи по ID", method = "restore")
+    @RequestMapping(value = "/soft-delete/{id}", method = RequestMethod.PUT)
+    public void restore(@PathVariable(value = "id") Long id) {
+        service.restore(id);
+    }
+
 }
+
 
