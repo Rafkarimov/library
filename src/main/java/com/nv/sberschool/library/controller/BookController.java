@@ -4,15 +4,12 @@ import com.nv.sberschool.library.dto.BookDto;
 import com.nv.sberschool.library.dto.BookWithAuthorsDto;
 import com.nv.sberschool.library.mapper.BookMapper;
 import com.nv.sberschool.library.mapper.BookWithAuthorsMapper;
-import com.nv.sberschool.library.mapper.GenericMapper;
 import com.nv.sberschool.library.model.Author;
 import com.nv.sberschool.library.model.Book;
 import com.nv.sberschool.library.service.AuthorService;
 import com.nv.sberschool.library.service.BookService;
-import com.nv.sberschool.library.service.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest/books")

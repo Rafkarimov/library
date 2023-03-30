@@ -27,7 +27,7 @@ public interface BookRepository extends GenericRepository<Book> {
           left join books_authors ba on b.id = ba.book_id
           join authors a on a.id = ba.author_id
           where b.title ilike '%' || coalesce(:title, '%') || '%'
-          and cast(b.genre as char) like coalesce(:genre,'%')
+          and cast(b.genre as char(2)) like coalesce(:genre,'%')
           and a.fio ilike '%' || :fio || '%'
           and b.is_deleted = false
                """)
@@ -38,5 +38,3 @@ public interface BookRepository extends GenericRepository<Book> {
             Pageable pageable);
 
 }
-
-

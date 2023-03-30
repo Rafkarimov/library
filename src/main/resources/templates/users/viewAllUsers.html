@@ -1,6 +1,7 @@
 <!--Бронь маршрута-->
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}"
       lang="en">
 <head>
@@ -13,6 +14,7 @@
     <div class="row">
         <div class="col">
             <a
+                    sec:authorize="hasRole('ADMIN')"
                     href="/users/add-librarian"
                     class="btn btn-secondary"
                     role="button"

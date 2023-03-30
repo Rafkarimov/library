@@ -33,7 +33,8 @@
                 <h2>Все авторы библиотеки</h2>
             </div>
             <div class="col">
-                <a href="authors/add"
+                <a sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))"
+                   href="authors/add"
                    class="btn btn-success"
                    role="button"
                    style="float: right"
@@ -58,7 +59,7 @@
                     <td th:text="${author.getBirthDate()}"></td>
                     <td th:text="${author.getDescription()}"></td>
                     <td>
-                        <div>
+                        <div sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))">
                             <a class="btn btn-sm btn-outline-success" th:href="'/authors/update/' + ${author.getId()}">Обновить</a>
                             <a th:if="${!author.isDeleted()}" class="btn btn-sm btn-outline-danger" th:href="'/authors/delete/' + ${author.getId()}"
                                onclick="return confirm('Вы действительно хотите удалить автора?');">Удалить</a>

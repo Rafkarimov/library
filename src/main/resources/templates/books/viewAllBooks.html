@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
@@ -46,11 +47,13 @@
                 <h2>Все книги библиотеки</h2>
             </div>
             <div class="col">
-                <a href="/books/add"
-                   class="btn btn-success"
-                   role="button"
-                   style="float: right"
-                   aria-disabled="true">Добавить книгу</a>
+                <a
+                        sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))"
+                        href="/books/add"
+                        class="btn btn-success"
+                        role="button"
+                        style="float: right"
+                        aria-disabled="true">Добавить книгу</a>
             </div>
         </div>
         <div>
@@ -83,14 +86,13 @@
                         </ul>
                     </td>
                     <td>
-                        <div>
+                        <div sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))">
                             <a class="btn btn-sm btn-outline-success" th:href="'/books/update/' + ${book.id}">Обновить</a>
                             <a th:if="${!book.isDeleted()}" class="btn btn-sm btn-outline-danger" th:href="'/books/delete/' + ${book.id}"
                                onclick="return confirm('Вы действительно хотите удалить автора?');">Удалить</a>
                             <a th:if="${book.isDeleted()}" class="btn btn-sm btn-outline-warning" th:href="'/books/restore/' + ${book.getId()}">Восстановить</a>
-
                         </div>
-                        <a th:if="${book.getAmount() > 0}" class="btn btn-sm btn-outline-success"
+                        <a sec:authorize="isAuthenticated() && !hasRole('ADMIN')" th:if="${book.getAmount() > 0}" class="btn btn-sm btn-outline-success"
                            th:href="'/publish/get-book/' + ${book.id}">Арендовать книгу</a>
                     </td>
                 </tr>
@@ -128,3 +130,4 @@
 </div>
 </body>
 </html>
+

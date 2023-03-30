@@ -1,15 +1,13 @@
 package com.nv.sberschool.library.service;
 
-import com.nv.sberschool.library.mapper.GenericMapper;
-import com.nv.sberschool.library.model.Author;
 import com.nv.sberschool.library.model.GenericModel;
 import com.nv.sberschool.library.repository.GenericRepository;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.webjars.NotFoundException;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public abstract class GenericService<T extends GenericModel> {
 
