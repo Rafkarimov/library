@@ -15,7 +15,7 @@ public class MVCLoginController {
                         SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
                         !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         ) {
-            return "redirect:registration";
+            return "redirect:/";
         }
         return "login";
     }

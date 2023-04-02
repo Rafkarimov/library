@@ -9,8 +9,8 @@ import com.nv.sberschool.library.model.Book;
 import com.nv.sberschool.library.repository.BookRepository;
 import com.nv.sberschool.library.service.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/rest/authors")
 @Tag(name = "Авторы", description = "Контроллер для работы с авторами книг библиотеки")
+@SecurityRequirement(name = "Bearer Authentication")
 public class AuthorController extends GenericController<Author, AuthorDto> {
 
     private final BookRepository bookRepository;
@@ -57,4 +60,3 @@ public class AuthorController extends GenericController<Author, AuthorDto> {
         return ResponseEntity.ok().body(authorWithBooksMapper.toDtos(authorService.listAll()));
     }
 }
-

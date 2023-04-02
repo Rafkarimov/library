@@ -1,18 +1,14 @@
 package com.nv.sberschool.library.MVC.controller;
 
-import static com.nv.sberschool.library.constants.UserRolesConstants.ADMIN;
-
 import com.nv.sberschool.library.dto.UserDto;
 import com.nv.sberschool.library.mapper.UserMapper;
 import com.nv.sberschool.library.model.User;
 import com.nv.sberschool.library.service.UserService;
-import com.nv.sberschool.library.service.userdetails.CustomUserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import static com.nv.sberschool.library.constants.UserRolesConstants.ADMIN;
 
 @Controller
 @RequestMapping("/users")
@@ -53,8 +51,8 @@ public class MVCUserController {
         if(service.getUserByEmail(userDto.getEmail()) != null) {
             bindingResult.rejectValue("email", "error.email", "Такая почта уже существует");
         }
-        service.create(mapper.toEntity(userDto));
-        return "redirect:/login";
+        service.createLibrarian(mapper.toEntity(userDto));
+        return "redirect:/users";
     }
 
     @PostMapping("/registration")
@@ -65,8 +63,8 @@ public class MVCUserController {
         if(service.getUserByEmail(userDto.getEmail()) != null) {
             bindingResult.rejectValue("email", "error.email", "Такая почта уже существует");
         }
-        service.createLibrarian(mapper.toEntity(userDto));
-        return "redirect:/users";
+        service.create(mapper.toEntity(userDto));
+        return "redirect:/login";
     }
 
     @GetMapping("")

@@ -1,7 +1,5 @@
 package com.nv.sberschool.library.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +27,7 @@ import java.util.Set;
 @Entity
 @Table(name = "authors")
 @SequenceGenerator(name = "default_gen", sequenceName = "authors_seq", allocationSize = 1)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "jsonId")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "jsonId")
 public class Author extends GenericModel {
     @Column(name = "fio", nullable = false)
     private String authorFio;

@@ -12,6 +12,7 @@ public interface SecurityConstants {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/login",
+            "/rest/users/auth",
             "/users/registration",
             "/users/remember-password",
             "/users/change-password",
@@ -29,6 +30,17 @@ public interface SecurityConstants {
             "/authors/search",
             "/authors"
     );
+
+    List<String> AUTHORS_PERMISSION_LIST = List.of(
+            "/authors/add",
+            "/authors/update",
+            "/authors/delete",
+            "/authors/get-book/*",
+            "/authors/add",
+            "/authors/download/*",
+            "/rest/authors/soft-delete/{id}"
+    );
+
     List<String> BOOKS_PERMISSION_LIST = List.of(
             "/books/add",
             "/books/update",

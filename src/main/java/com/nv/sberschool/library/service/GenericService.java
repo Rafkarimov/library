@@ -1,14 +1,19 @@
 package com.nv.sberschool.library.service;
 
+import com.nv.sberschool.library.mapper.GenericMapper;
+import com.nv.sberschool.library.model.Author;
 import com.nv.sberschool.library.model.GenericModel;
 import com.nv.sberschool.library.repository.GenericRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.webjars.NotFoundException;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.webjars.NotFoundException;
 
+@Slf4j
 public abstract class GenericService<T extends GenericModel> {
 
     private final GenericRepository<T> repository;
@@ -37,12 +42,14 @@ public abstract class GenericService<T extends GenericModel> {
     }
 
     public T create(T object) {
-        object.setCreatedBy("ADMIN");
+        object.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         object.setCreatedWhen(LocalDateTime.now());
         return repository.save(object);
     }
 
     public T update(T object) {
+        object.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+        object.setUpdatedWhen(LocalDateTime.now());
         return repository.save(object);
     }
 
@@ -51,8 +58,9 @@ public abstract class GenericService<T extends GenericModel> {
     }
 
     public void softDelete(Long id) {
+        log.error("GENERIC SOFT");
         T object = getOne(id);
-        object.setDeletedBy("ADMIN"); //TODO переделать с секурити
+        object.setDeletedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         object.setDeleted(true);
         object.setDeletedWhen(LocalDateTime.now());
         update(object);
@@ -60,7 +68,7 @@ public abstract class GenericService<T extends GenericModel> {
 
     public void restore(Long id) {
         T object = getOne(id);
-        object.setDeletedBy("ADMIN"); //TODO переделать с секурити
+        object.setDeletedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         object.setDeleted(false);
         object.setDeletedWhen(null);
         update(object);

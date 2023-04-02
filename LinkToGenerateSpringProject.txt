@@ -5,5 +5,9 @@ https://www.baeldung.com/jpa-cascade-types -- CascadeTypes
 https://www.javatpoint.com/spring-boot-crud-operations -- crud operations
 https://habr.com/ru/company/haulmont/blog/653843/ -- GenerationType
 https://github.com/iluwatar/java-design-patterns/ -- java-design-patterns
-
+https://habr.com/ru/post/533868/
+https://habr.com/ru/post/340146/
+https://habr.com/ru/post/278411/
+https://habr.com/ru/post/545610/
 curl -X POST --data 'qwe' localhost:8080/qwe/postObject --header "Content-Type:text/plain"
+

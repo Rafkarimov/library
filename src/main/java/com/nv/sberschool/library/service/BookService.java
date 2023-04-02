@@ -5,10 +5,12 @@ import com.nv.sberschool.library.dto.BookWithAuthorsDto;
 import com.nv.sberschool.library.mapper.BookWithAuthorsMapper;
 import com.nv.sberschool.library.model.Book;
 import com.nv.sberschool.library.repository.BookRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +25,6 @@ public class BookService extends GenericService<Book> {
         this.bookWithAuthorsMapper = bookWithAuthorsMapper;
     }
 
-    //TODO подумать
     @Override
     public Book update(Book object) {
         Book book = getOne(object.getId());
@@ -35,6 +36,8 @@ public class BookService extends GenericService<Book> {
         book.setOnlineCopyPath(object.getOnlineCopyPath() != null ? object.getOnlineCopyPath() : book.getOnlineCopyPath());
         book.setGenre(object.getGenre() != null ? object.getGenre() : book.getGenre());
         book.setAuthors(object.getAuthors() != null ? object.getAuthors() : book.getAuthors());
+        book.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+        book.setUpdatedWhen(LocalDateTime.now());
         return super.update(book);
     }
 

@@ -3,6 +3,8 @@ package com.nv.sberschool.library.service;
 import com.nv.sberschool.library.model.User;
 import com.nv.sberschool.library.repository.UserRepository;
 import java.time.LocalDateTime;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ public class UserService extends GenericService<User> {
     @Override
     public User create(User object) {
         object.setRole(roleService.getByTitle("USER"));
+        object.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+        object.setCreatedWhen(LocalDateTime.now());
         object.setPassword(bCryptPasswordEncoder.encode(object.getPassword()));
         return super.create(object);
     }
@@ -35,7 +39,7 @@ public class UserService extends GenericService<User> {
         object.setBookRentInfos(foundUser.getBookRentInfos());
         object.setDeleted(foundUser.isDeleted());
         object.setDeletedWhen(foundUser.getDeletedWhen());
-        object.setUpdatedBy(foundUser.getUpdatedBy());
+        object.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         object.setUpdatedWhen(LocalDateTime.now());
         object.setCreatedBy(foundUser.getCreatedBy());
         object.setCreatedWhen(foundUser.getCreatedWhen());
@@ -54,6 +58,10 @@ public class UserService extends GenericService<User> {
         object.setRole(roleService.getByTitle("LIBRARIAN"));
         object.setPassword(bCryptPasswordEncoder.encode(object.getPassword()));
         return super.create(object);
+    }
+
+    public boolean checkPassword(String password, UserDetails foundUser) {
+        return bCryptPasswordEncoder.matches(password, foundUser.getPassword());
     }
 }
 

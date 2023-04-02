@@ -5,6 +5,7 @@ import com.nv.sberschool.library.mapper.GenericMapper;
 import com.nv.sberschool.library.model.GenericModel;
 import com.nv.sberschool.library.service.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,6 +79,7 @@ public abstract class GenericController<T extends GenericModel, N extends Generi
     @Operation(description = "Софт удаление записи по ID", method = "soft delete")
     @RequestMapping(value = "/soft-delete/{id}", method = RequestMethod.DELETE)
     public void softDelete(@PathVariable(value = "id") Long id) {
+        log.error("CONTROLLER SOFT");
         service.softDelete(id);
     }
 
@@ -88,5 +90,4 @@ public abstract class GenericController<T extends GenericModel, N extends Generi
     }
 
 }
-
 

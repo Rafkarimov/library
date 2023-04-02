@@ -72,5 +72,12 @@ public class CustomUserDetails implements UserDetails {
         return id;
     }
 
+    @Override
+    public String toString() {
+        return "{\"user_id\":\"" + id + "\"," +
+                "\"username\":\"" + username + "\"," +
+                "\"user_role\":\"" + authorities + "\"," +
+                "\"user_password\":\"" + password + "\"}";
+    }
 }
 
