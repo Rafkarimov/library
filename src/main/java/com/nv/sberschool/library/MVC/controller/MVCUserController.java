@@ -1,14 +1,18 @@
 package com.nv.sberschool.library.MVC.controller;
 
+import static com.nv.sberschool.library.constants.UserRolesConstants.ADMIN;
+
 import com.nv.sberschool.library.dto.UserDto;
 import com.nv.sberschool.library.mapper.UserMapper;
 import com.nv.sberschool.library.model.User;
 import com.nv.sberschool.library.service.UserService;
+import com.nv.sberschool.library.service.userdetails.CustomUserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,8 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import static com.nv.sberschool.library.constants.UserRolesConstants.ADMIN;
 
 @Controller
 @RequestMapping("/users")
@@ -47,9 +49,11 @@ public class MVCUserController {
     public String addLibrarian(@ModelAttribute("userForm") UserDto userDto, BindingResult bindingResult) {
         if(userDto.getLogin().equals(ADMIN) || service.getUserByLogin(userDto.getLogin()) != null) {
             bindingResult.rejectValue("login", "error.login", "Такой логин уже существует");
+            return "redirect:/users";
         }
         if(service.getUserByEmail(userDto.getEmail()) != null) {
             bindingResult.rejectValue("email", "error.email", "Такая почта уже существует");
+            return "redirect:/users";
         }
         service.createLibrarian(mapper.toEntity(userDto));
         return "redirect:/users";
@@ -59,9 +63,11 @@ public class MVCUserController {
     public String registration(@ModelAttribute("userForm") UserDto userDto, BindingResult bindingResult) {
         if(userDto.getLogin().equals(ADMIN) || service.getUserByLogin(userDto.getLogin()) != null) {
             bindingResult.rejectValue("login", "error.login", "Такой логин уже существует");
+            return "redirect:/login";
         }
         if(service.getUserByEmail(userDto.getEmail()) != null) {
             bindingResult.rejectValue("email", "error.email", "Такая почта уже существует");
+            return "redirect:/login";
         }
         service.create(mapper.toEntity(userDto));
         return "redirect:/login";
@@ -96,6 +102,11 @@ public class MVCUserController {
     public String updateProfile(@ModelAttribute("userForm") UserDto userDto) {
         service.update(mapper.toEntity(userDto));
         return "redirect:/users/profile/" + userDto.getId();
+
+
+
+
+
     }
 
 

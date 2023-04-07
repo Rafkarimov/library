@@ -18,11 +18,20 @@ public interface SecurityConstants {
             "/users/change-password",
             "/error");
 
+    //TODO  "/books/{bookId}", "/books/add",
     List<String> BOOKS_WHITE_LIST = List.of(
-            "/books/{id}",
+            //TODO /books/{\\d+}
+            "/books/{bookId}",
             "/books/search",
             "/books/search/author",
             "/books"
+    );
+
+    List<String> RENT_WHITE_LIST = List.of(
+            "/rent/get-book/*",
+            "/rent/get-book",
+            "/rent/user-books",
+            "/rent/return-book/{id}"
     );
 
     List<String> AUTHORS_WHITE_LIST = List.of(
@@ -65,4 +74,3 @@ public interface SecurityConstants {
 
     List<String> USERS_REST_WHITE_LIST = List.of("/users/auth");
 }
-

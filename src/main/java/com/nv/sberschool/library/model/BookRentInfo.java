@@ -1,20 +1,20 @@
 package com.nv.sberschool.library.model;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "book_rent_info")
 @SequenceGenerator(name = "default_gen", sequenceName = "book_rent_info_seq", allocationSize = 1)
 public class BookRentInfo extends GenericModel {
@@ -38,6 +38,9 @@ public class BookRentInfo extends GenericModel {
     @Column(name = "rent_period", nullable = false)
     private Integer rentPeriod;
 
+    @Column(name = "amount", nullable = false)
+    private Integer amount;
+
     @Override
     public String toString() {
         return "BookRentInfo{" +
@@ -51,5 +54,4 @@ public class BookRentInfo extends GenericModel {
                 '}';
     }
 }
-
 

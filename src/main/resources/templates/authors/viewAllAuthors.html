@@ -33,6 +33,7 @@
                 <h2>Все авторы библиотеки</h2>
             </div>
             <div class="col">
+                <!--        TODO брать из констант-->
                 <a sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))"
                    href="authors/add"
                    class="btn btn-success"
@@ -117,4 +118,3 @@
 </div>
 </body>
 </html>
-

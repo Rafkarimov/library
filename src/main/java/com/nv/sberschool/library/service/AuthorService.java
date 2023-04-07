@@ -1,5 +1,6 @@
 package com.nv.sberschool.library.service;
 
+import com.nv.sberschool.library.annotation.MySecuredAnnotation;
 import com.nv.sberschool.library.dto.AddBookDto;
 import com.nv.sberschool.library.model.Author;
 import com.nv.sberschool.library.repository.AuthorRepository;
@@ -24,7 +25,8 @@ public class AuthorService extends GenericService<Author> {
     }
 
     @Override
-    @Secured(value = "ROLE_LIBRARIAN")
+//  @Secured(value = "ROLE_LIBRARIAN")
+    @MySecuredAnnotation("ROLE_LIBRARIAN")
     public void softDelete(Long id) {
         log.error("SOFT");
         Author author = getOne(id);
@@ -47,3 +49,4 @@ public class AuthorService extends GenericService<Author> {
         update(author);
     }
 }
+

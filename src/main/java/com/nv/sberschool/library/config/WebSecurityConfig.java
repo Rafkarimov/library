@@ -48,11 +48,16 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) ->
                         requests
                                 .requestMatchers(RESOURCES_WHITE_LIST.toArray(String[]::new)).permitAll()
+
                                 .requestMatchers(BOOKS_WHITE_LIST.toArray(String[]::new)).permitAll()
-                                .requestMatchers(AUTHORS_WHITE_LIST.toArray(String[]::new)).permitAll()
-                                .requestMatchers(USERS_WHITE_LIST.toArray(String[]::new)).authenticated()
                                 .requestMatchers(BOOKS_PERMISSION_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
+
+                                .requestMatchers(AUTHORS_WHITE_LIST.toArray(String[]::new)).permitAll()
+
+                                .requestMatchers(USERS_WHITE_LIST.toArray(String[]::new)).authenticated()
                                 .requestMatchers(USERS_PERMISSION_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
+
+                                .requestMatchers(RENT_WHITE_LIST.toArray(String[]::new)).authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")

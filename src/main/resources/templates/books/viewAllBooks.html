@@ -93,7 +93,7 @@
                             <a th:if="${book.isDeleted()}" class="btn btn-sm btn-outline-warning" th:href="'/books/restore/' + ${book.getId()}">Восстановить</a>
                         </div>
                         <a sec:authorize="isAuthenticated() && !hasRole('ADMIN')" th:if="${book.getAmount() > 0}" class="btn btn-sm btn-outline-success"
-                           th:href="'/publish/get-book/' + ${book.id}">Арендовать книгу</a>
+                           th:href="'/rent/get-book/' + ${book.id}">Арендовать книгу</a>
                     </td>
                 </tr>
                 </tbody>
