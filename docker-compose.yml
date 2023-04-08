@@ -10,3 +10,10 @@ services:
       POSTGRES_PASSWORD: "12345"
     ports:
       - "5432:5432"
+    networks:
+      java14-network:
+        aliases:
+          - java14db
+networks:
+  java14-network:
+    name: 'our_java14_network'

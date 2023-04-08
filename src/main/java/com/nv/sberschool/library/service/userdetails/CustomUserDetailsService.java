@@ -1,6 +1,5 @@
 package com.nv.sberschool.library.service.userdetails;
 
-import com.nv.sberschool.library.constants.UserRolesConstants;
 import com.nv.sberschool.library.model.User;
 import com.nv.sberschool.library.repository.UserRepository;
 import java.util.ArrayList;
@@ -42,13 +41,10 @@ public class CustomUserDetailsService implements UserDetailsService {
             User user = repository.findUserByLogin(username);
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(
-                    new SimpleGrantedAuthority(
-                            user.getRole().getId() == 1L
-                                    ? "ROLE_" + UserRolesConstants.USER
-                                    : "ROLE_" + UserRolesConstants.LIBRARIAN
-                    )
+                    new SimpleGrantedAuthority("ROLE_" + user.getRole().getTitle())
             );
             return new CustomUserDetails(user.getId().intValue(), username, user.getPassword(), authorities);
         }
     }
 }
+

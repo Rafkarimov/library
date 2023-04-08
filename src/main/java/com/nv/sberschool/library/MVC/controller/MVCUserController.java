@@ -7,6 +7,7 @@ import com.nv.sberschool.library.mapper.UserMapper;
 import com.nv.sberschool.library.model.User;
 import com.nv.sberschool.library.service.UserService;
 import com.nv.sberschool.library.service.userdetails.CustomUserDetails;
+import jakarta.websocket.server.PathParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -47,11 +48,11 @@ public class MVCUserController {
 
     @PostMapping("/add-librarian")
     public String addLibrarian(@ModelAttribute("userForm") UserDto userDto, BindingResult bindingResult) {
-        if(userDto.getLogin().equals(ADMIN) || service.getUserByLogin(userDto.getLogin()) != null) {
+        if (userDto.getLogin().equals(ADMIN) || service.getUserByLogin(userDto.getLogin()) != null) {
             bindingResult.rejectValue("login", "error.login", "Такой логин уже существует");
             return "redirect:/users";
         }
-        if(service.getUserByEmail(userDto.getEmail()) != null) {
+        if (service.getUserByEmail(userDto.getEmail()) != null) {
             bindingResult.rejectValue("email", "error.email", "Такая почта уже существует");
             return "redirect:/users";
         }
@@ -61,11 +62,11 @@ public class MVCUserController {
 
     @PostMapping("/registration")
     public String registration(@ModelAttribute("userForm") UserDto userDto, BindingResult bindingResult) {
-        if(userDto.getLogin().equals(ADMIN) || service.getUserByLogin(userDto.getLogin()) != null) {
+        if (userDto.getLogin().equals(ADMIN) || service.getUserByLogin(userDto.getLogin()) != null) {
             bindingResult.rejectValue("login", "error.login", "Такой логин уже существует");
             return "redirect:/login";
         }
-        if(service.getUserByEmail(userDto.getEmail()) != null) {
+        if (service.getUserByEmail(userDto.getEmail()) != null) {
             bindingResult.rejectValue("email", "error.email", "Такая почта уже существует");
             return "redirect:/login";
         }
@@ -102,13 +103,32 @@ public class MVCUserController {
     public String updateProfile(@ModelAttribute("userForm") UserDto userDto) {
         service.update(mapper.toEntity(userDto));
         return "redirect:/users/profile/" + userDto.getId();
-
-
-
-
-
     }
 
+    @GetMapping("remember-password")
+    public String rememberPassword() {
+        return "users/rememberPassword";
+    }
+
+    @PostMapping("remember-password")
+    public String rememberPassword(@ModelAttribute("changePasswordForm") UserDto userDto) {
+        service.sendChangePasswordEmail(service.getUserByEmail(userDto.getEmail()));
+        return "redirect:/login";
+    }
+
+    @GetMapping("/change-password")
+    public String changePassword(@PathParam(value = "uuid") String uuid, Model model) {
+        model.addAttribute("uuid", uuid);
+        return "users/changePassword";
+    }
+
+    @PostMapping("change-password")
+    public String changePassword(
+            @PathParam(value = "uuid") String uuid,
+            @ModelAttribute("changePasswordForm") UserDto userDto
+    ) {
+        service.changePassword(uuid, userDto.getPassword());
+        return "redirect:/login";
+    }
 
 }
-

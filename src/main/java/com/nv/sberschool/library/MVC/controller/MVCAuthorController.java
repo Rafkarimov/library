@@ -6,6 +6,7 @@ import com.nv.sberschool.library.mapper.AuthorMapper;
 import com.nv.sberschool.library.model.Author;
 import com.nv.sberschool.library.service.AuthorService;
 import com.nv.sberschool.library.service.BookService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,14 +53,21 @@ public class MVCAuthorController {
     }
 
     @GetMapping("/add")
-    public String create() {
+    public String create(@ModelAttribute("authorForm") AuthorDto authorDto) {
         return "authors/addAuthor";
     }
 
     @PostMapping("/add")
-    public String create(@ModelAttribute("authorForm") AuthorDto authorDto) {
-        authorService.create(authorMapper.toEntity(authorDto));
-        return "redirect:/authors";
+    public String create(
+            @ModelAttribute("authorForm") @Valid AuthorDto authorDto,
+            BindingResult result
+    ) {
+        if(result.hasErrors()) {
+            return "/authors/addAuthor";
+        } else {
+            authorService.create(authorMapper.toEntity(authorDto));
+            return "redirect:/authors";
+        }
     }
 
     @GetMapping("/delete/{id}")
@@ -116,6 +125,12 @@ public class MVCAuthorController {
     public String addBook(@ModelAttribute("authorBookForm") AddBookDto addBookDTO) {
         authorService.addBook(addBookDTO);
         return "redirect:/authors";
+    }
+
+    @GetMapping("/{id}")
+    public String getOne(@PathVariable Long id, Model model) {
+        model.addAttribute("author", authorMapper.toDto(authorService.getOne(id)));
+        return "authors/viewAuthor";
     }
 
 }

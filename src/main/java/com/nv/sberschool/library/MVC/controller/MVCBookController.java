@@ -1,5 +1,6 @@
 package com.nv.sberschool.library.MVC.controller;
 
+import com.nv.sberschool.library.dto.AuthorDto;
 import com.nv.sberschool.library.dto.BookDto;
 import com.nv.sberschool.library.dto.BookSearchDTO;
 import com.nv.sberschool.library.dto.BookWithAuthorsDto;
@@ -67,7 +68,7 @@ public class MVCBookController {
 
     @GetMapping("/{bookId}")
     public String viewOneBook(@PathVariable Long bookId, Model model) {
-        model.addAttribute("book", mapper.toDto(service.getOne(bookId)));
+        model.addAttribute("book", bookWithAuthorsMapper.toDto(service.getOne(bookId)));
         return "/books/viewBook";
     }
 
@@ -96,13 +97,28 @@ public class MVCBookController {
     }
 
     @PostMapping("/search")
-    public String searchBooks(@RequestParam(value = "page", defaultValue = "1") int page,
-                              @RequestParam(value = "size", defaultValue = "5") int size,
-                              @ModelAttribute("bookSearchForm") BookSearchDTO bookSearchDTO,
-                              Model model) {
+    public String searchBooks(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @ModelAttribute("bookSearchForm") BookSearchDTO bookSearchDTO,
+            Model model
+    ) {
         PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "title"));
         model.addAttribute("books", service.findBooks(bookSearchDTO, pageRequest));
         return "books/viewAllBooks";
     }
 
+    @PostMapping("/search/author")
+    public String searchBooks(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @ModelAttribute("authorSearchForm") AuthorDto authorDto,
+            Model model
+    ) {
+        BookSearchDTO bookSearchDTO = new BookSearchDTO();
+        bookSearchDTO.setAuthorFio(authorDto.getAuthorFio());
+        return searchBooks(page, size, bookSearchDTO, model);
+    }
+
 }
+

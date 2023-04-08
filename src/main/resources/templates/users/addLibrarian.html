@@ -12,7 +12,7 @@
 <body>
 <div layout:fragment="content">
     <h3 class="mt-3 mb-3">Создание нового библиотекаря</h3>
-    <form method="POST" class="needs-validation" novalidate style="max-width: 50vw" th:action="@{/users/registration}" th:object="${userForm}">
+    <form method="POST" class="needs-validation" novalidate style="max-width: 50vw" th:action="@{/users/add-librarian}" th:object="${userForm}">
         <div class="mt-3 row g-2">
             <div class="col-md">
                 <div class="form-floating">
@@ -97,3 +97,4 @@
 
 </body>
 </html>
+

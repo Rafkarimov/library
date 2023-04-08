@@ -16,6 +16,4 @@ public class RoleService {
     public Role getByTitle(String title) {
         return repository.getRoleByTitle(title);
     }
-
 }
-

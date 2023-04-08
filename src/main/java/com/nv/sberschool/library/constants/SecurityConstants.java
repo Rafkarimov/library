@@ -46,6 +46,7 @@ public interface SecurityConstants {
             "/authors/delete",
             "/authors/get-book/*",
             "/authors/add",
+            "/authors/add-book/{id}",
             "/authors/download/*",
             "/rest/authors/soft-delete/{id}"
     );
@@ -74,3 +75,4 @@ public interface SecurityConstants {
 
     List<String> USERS_REST_WHITE_LIST = List.of("/users/auth");
 }
+

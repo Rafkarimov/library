@@ -1,17 +1,9 @@
 package com.nv.sberschool.library.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.Set;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,6 +39,9 @@ public class User extends GenericModel {
 
     @Column(name = "address")
     private String address;
+
+    @Column(name = "change_password_token")
+    private String changePasswordToken;
 
     //TODO при создании пользователя с несуществующей ролью, роль добавляется в базу
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

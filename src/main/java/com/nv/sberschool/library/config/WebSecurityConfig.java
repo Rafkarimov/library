@@ -53,6 +53,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(BOOKS_PERMISSION_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
 
                                 .requestMatchers(AUTHORS_WHITE_LIST.toArray(String[]::new)).permitAll()
+                                .requestMatchers(AUTHORS_PERMISSION_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
 
                                 .requestMatchers(USERS_WHITE_LIST.toArray(String[]::new)).authenticated()
                                 .requestMatchers(USERS_PERMISSION_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
@@ -80,3 +81,4 @@ public class WebSecurityConfig {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 }
+
