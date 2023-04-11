@@ -1,11 +1,14 @@
 package com.nv.sberschool.library.dto;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,14 +17,11 @@ import java.time.LocalDateTime;
 public abstract class GenericDto {
 
     protected Long id;
-    protected LocalDateTime createdWhen = LocalDateTime.now();
+    //  protected LocalDateTime createdWhen = LocalDateTime.now();
     protected String createdBy = "DEFAULT_USER";
     protected boolean isDeleted = false;
     protected String deletedBy;
-    protected LocalDateTime deletedWhen;
-    protected LocalDateTime updatedWhen;
+    //  protected LocalDateTime deletedWhen;
+//  protected LocalDateTime updatedWhen;
     protected String updatedBy;
 }
-
-
-

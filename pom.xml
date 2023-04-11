@@ -18,6 +18,18 @@
 	</properties>
 	<dependencies>
 
+		<!--        следующие две зависимости нужны для корректного отображения даты и времени в тестах при парсинге в JSON-->
+		<!--	Java 8 Date/time	-->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jdk8</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
@@ -135,4 +147,3 @@
 	</build>
 
 </project>
-
