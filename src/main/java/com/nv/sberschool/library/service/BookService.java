@@ -1,10 +1,14 @@
 package com.nv.sberschool.library.service;
 
+import com.nv.sberschool.library.dto.BookDto;
 import com.nv.sberschool.library.dto.BookSearchDTO;
 import com.nv.sberschool.library.dto.BookWithAuthorsDto;
 import com.nv.sberschool.library.mapper.BookWithAuthorsMapper;
 import com.nv.sberschool.library.model.Book;
 import com.nv.sberschool.library.repository.BookRepository;
+import com.nv.sberschool.library.utils.FileHelper;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -12,6 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class BookService extends GenericService<Book> {
@@ -53,5 +58,10 @@ public class BookService extends GenericService<Book> {
         List<BookWithAuthorsDto> result = bookWithAuthorsMapper.toDtos(bookPage.getContent());
         return new PageImpl<>(result, pageable, bookPage.getTotalElements());
     }
-}
 
+    public Book create(Book book, MultipartFile file) throws IOException {
+        String fileName = FileHelper.createFile(file);
+        book.setOnlineCopyPath(fileName);
+        return super.create(book);
+    }
+}

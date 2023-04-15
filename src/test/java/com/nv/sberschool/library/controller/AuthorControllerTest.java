@@ -1,66 +1,48 @@
 package com.nv.sberschool.library.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nv.sberschool.library.config.jwt.JWTTokenUtil;
+import com.nv.sberschool.library.dto.AddBookDto;
 import com.nv.sberschool.library.dto.AuthorDto;
-import com.nv.sberschool.library.service.userdetails.CustomUserDetailsService;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-@TestInstance(Lifecycle.PER_CLASS)
+
 @Slf4j
-public class AuthorControllerTest {
+public class AuthorControllerTest extends GenericControllerTest {
 
-    @Autowired
-    private MockMvc mvc;
+    private static final String BASE_URL = "/rest/authors";
 
-    @Autowired
-    private JWTTokenUtil jwtTokenUtil;
+    @Override
+    @Test
+    void getById() {
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-    private String token = "";
-
-    protected ObjectMapper objectMapper = new ObjectMapper();
-
-    private HttpHeaders headers = new HttpHeaders();
-    private String generateToken(String username) {
-        return jwtTokenUtil.generateToken(userDetailsService.loadUserByUsername(username));
     }
 
-    @BeforeAll
-    public void prepare() {
-        token = generateToken("librarian");
-        headers.add("Authorization", "Bearer " + token);
+    @Override
+    @Test
+    void getByCreator() {
+
     }
 
     @Test
     void getAll() throws Exception {
-        String result = mvc.perform(get("/rest/authors/getAll")
+        String result = super.mvc.perform(get(BASE_URL + "/getAll")
                         .headers(headers)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -68,18 +50,18 @@ public class AuthorControllerTest {
                 .andExpect(status().is2xxSuccessful())
                 .andReturn()
                 .getResponse()
-                .getContentAsString();
+                .getContentAsString(StandardCharsets.UTF_8);
 
         log.info(result);
-        //TODO не работает
-//    List<AuthorDto> authorDtoList = objectMapper.readValue(result, new TypeReference<List<AuthorDto>>() {});
-//    authorDtoList.forEach(authorDto -> log.info(authorDto.getAuthorFio()));
+        List<AuthorDto> authorDtoList = objectMapper.readValue(result, new TypeReference<List<AuthorDto>>() {
+        });
+        authorDtoList.forEach(authorDto -> log.info(authorDto.getAuthorFio()));
     }
 
     @Test
     void create() throws Exception {
-        AuthorDto authorDTO = new AuthorDto("REST_TestAuthorFio", "2023-01-01", "Test Description", new HashSet<>());
-        String result = mvc.perform(post("/rest/authors/add")
+        AuthorDto authorDTO = new AuthorDto("REST_TestAuthorFio", LocalDate.now(), "Test Description", new HashSet<>());
+        String result = mvc.perform(post(BASE_URL + "/add")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .headers(headers)
                         .content(asJsonString(authorDTO))
@@ -95,7 +77,7 @@ public class AuthorControllerTest {
     @Test
     void update() throws Exception {
 
-        AuthorDto existingAuthor = objectMapper.readValue(mvc.perform(get("/rest/authors/getById")
+        AuthorDto existingAuthor = objectMapper.readValue(mvc.perform(get(BASE_URL + "/getById")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .headers(headers)
                                 .param("id", String.valueOf(4L))
@@ -117,19 +99,75 @@ public class AuthorControllerTest {
                 .andExpect(status().is2xxSuccessful());
     }
 
+    @Override
     @Test
-    void addBook() {
+    void deleteObject() {
     }
 
     @Test
-    void getAuthorsWithBooks() {
+    protected void softDelete() throws Exception {
+        mvc.perform(delete(BASE_URL + "/soft-delete/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .headers(headers)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+        AuthorDto existingAuthor = objectMapper.readValue(
+                mvc.perform(get(BASE_URL + "/getById")
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .headers(headers)
+                                .param("id", String.valueOf(1L))
+                        )
+                        .andExpect(status().is2xxSuccessful())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(), AuthorDto.class);
+        assertTrue(existingAuthor.isDeleted());
+    }
+
+    @Test
+    protected void restore() throws Exception {
+        mvc.perform(put(BASE_URL + "/restore/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .headers(headers)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+        AuthorDto existingAuthor = objectMapper.readValue(
+                mvc.perform(get(BASE_URL + "/getById")
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .headers(headers)
+                                .param("id", String.valueOf(1L))
+                        )
+                        .andExpect(status().is2xxSuccessful())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(), AuthorDto.class);
+        assertFalse(existingAuthor.isDeleted());
+    }
+
+    @Test
+    void addBook() throws Exception {
+        AddBookDto addBookDto = new AddBookDto(1L, 2L);
+        String result = mvc.perform(post(BASE_URL + "/addBook")
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .headers(headers)
+                        .content(asJsonString(addBookDto))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        AuthorDto authorDto = objectMapper.readValue(result, AuthorDto.class);
+        assertTrue(authorDto.getBooksId().contains(1L));
     }
 
     protected String asJsonString(final Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
-        }
-        catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             log.error(e.getMessage());
             return null;
         }

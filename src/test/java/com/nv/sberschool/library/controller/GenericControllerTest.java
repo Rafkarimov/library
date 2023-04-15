@@ -1,41 +1,63 @@
 package com.nv.sberschool.library.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nv.sberschool.library.config.jwt.JWTTokenUtil;
+import com.nv.sberschool.library.service.userdetails.CustomUserDetailsService;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpHeaders;
+import org.springframework.test.web.servlet.MockMvc;
 
-import org.junit.jupiter.api.Test;
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+@TestInstance(Lifecycle.PER_CLASS)
 
+public abstract class GenericControllerTest {
 
-class GenericControllerTest {
+    @Autowired
+    protected MockMvc mvc;
 
-    @Test
-    void getById() {
+    @Autowired
+    protected JWTTokenUtil jwtTokenUtil;
+
+    @Autowired
+    protected CustomUserDetailsService userDetailsService;
+
+    protected String token = "";
+
+    @Autowired
+    protected ObjectMapper objectMapper;
+
+    protected HttpHeaders headers = new HttpHeaders();
+
+    protected String generateToken(String username) {
+        return jwtTokenUtil.generateToken(userDetailsService.loadUserByUsername(username));
     }
 
-    @Test
-    void getByCreator() {
+    @BeforeAll
+    public void prepare() {
+        token = generateToken("librarian");
+        headers.add("Authorization", "Bearer " + token);
     }
 
-    @Test
-    void getAll() {
-    }
+    abstract void getById();
 
-    @Test
-    void create() {
-    }
+    abstract void getByCreator();
 
-    @Test
-    void update() {
-    }
+    abstract  void getAll() throws Exception;
 
-    @Test
-    void delete() {
-    }
+    abstract void create() throws Exception;
 
-    @Test
-    void softDelete() {
-    }
+    abstract void update() throws Exception;
 
-    @Test
-    void restore() {
-    }
+    abstract void deleteObject();
+
+    abstract void softDelete() throws Exception;
+
+    abstract void restore() throws Exception;
 }

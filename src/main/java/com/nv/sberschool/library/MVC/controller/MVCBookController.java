@@ -8,11 +8,21 @@ import com.nv.sberschool.library.mapper.BookMapper;
 import com.nv.sberschool.library.mapper.BookWithAuthorsMapper;
 import com.nv.sberschool.library.model.Book;
 import com.nv.sberschool.library.service.BookService;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +31,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/books")
@@ -61,8 +73,12 @@ public class MVCBookController {
     }
 
     @PostMapping("/add")
-    public String addBook(@ModelAttribute("bookForm") BookDto bookDto) {
-        service.create(mapper.toEntity(bookDto));
+    public String addBook(@ModelAttribute("bookForm") BookDto bookDto, @RequestParam MultipartFile file) throws IOException {
+        if(file != null && file.getSize() > 0) {
+            service.create(mapper.toEntity(bookDto), file);
+        } else {
+            service.create(mapper.toEntity(bookDto));
+        }
         return "redirect:/books";
     }
 
@@ -120,5 +136,25 @@ public class MVCBookController {
         return searchBooks(page, size, bookSearchDTO, model);
     }
 
+    @GetMapping(value = "/download", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
+    public ResponseEntity<Resource> downloadBook(@Param(value = "bookId") Long bookId) throws IOException {
+        Book book = service.getOne(bookId);
+        Path path = Paths.get(book.getOnlineCopyPath());
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+        return ResponseEntity.ok().headers(headers(path.getFileName().toString()))
+                .contentLength(path.toFile().length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(resource);
+    }
+
+    private HttpHeaders headers(String name) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + name);
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+        return headers;
+    }
 }
 

@@ -84,10 +84,9 @@ public abstract class GenericController<T extends GenericModel, N extends Generi
     }
 
     @Operation(description = "Восстановление записи по ID", method = "restore")
-    @RequestMapping(value = "/soft-delete/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/restore/{id}", method = RequestMethod.PUT)
     public void restore(@PathVariable(value = "id") Long id) {
         service.restore(id);
     }
 
 }
-

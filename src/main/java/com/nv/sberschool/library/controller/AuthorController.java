@@ -1,5 +1,6 @@
 package com.nv.sberschool.library.controller;
 
+import com.nv.sberschool.library.dto.AddBookDto;
 import com.nv.sberschool.library.dto.AuthorDto;
 import com.nv.sberschool.library.dto.AuthorWithBooksDto;
 import com.nv.sberschool.library.mapper.AuthorMapper;
@@ -11,16 +12,18 @@ import com.nv.sberschool.library.service.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/rest/authors")
@@ -42,12 +45,11 @@ public class AuthorController extends GenericController<Author, AuthorDto> {
     }
 
     @Operation(description = "Добавить книгу к автору", method = "addBook")
-    @RequestMapping(value = "/addBook", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthorDto> addBook(@RequestParam(value = "bookId") Long bookId,
-                                             @RequestParam(value = "authorId") Long authorId) {
+    @RequestMapping(value = "/addBook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AuthorDto> addBook(@RequestBody AddBookDto addBookDto) {
         try {
-            Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("Книга с переданным ID не найдена"));
-            Author author = authorService.getOne(authorId);
+            Book book = bookRepository.findById(addBookDto.getBookId()).orElseThrow(() -> new NotFoundException("Книга с переданным ID не найдена"));
+            Author author = authorService.getOne(addBookDto.getAuthorId());
             author.getBooks().add(book);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.toDto(authorService.update(author)));
         } catch (NotFoundException e) {
